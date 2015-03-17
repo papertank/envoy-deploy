@@ -71,6 +71,8 @@ Inside one of your deployment folders looks like the following (excluded some la
 	storage -> ../storage
 	vendor/
 	
+The deployment folder .env file and storage directory are symlinked to the parent folders in the main (parent) path.
+
 ## Todo
 
  * Cleanup old deployment folders
