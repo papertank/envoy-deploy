@@ -40,7 +40,13 @@ The init task creates a `.env` file in your root path - make sure and update the
 
 ### Deploy
 
-Each time you want to deploy
+Each time you want to deploy simply run the deploy task on your local machine in the repository direcory
+
+	envoy run deploy
+
+You can specify the Laravel environment (for artisan:migrate command) and git branch as options
+
+	envoy run deploy --branch=develop --env=development
 
 
 ## How it Works
