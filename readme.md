@@ -16,11 +16,9 @@ Your must have Envoy installed using the Composer global command:
 
 ### Setup
 
-Download or clone this repository then edit the envoy.config.php file with the Git repository and server path for your app.
+Download or clone this repository then edit the envoy.config.php file with the ssh login, Git repository, server path for your app.
 
 The `$path` (server path) should already be created in your server and be a blank directory.
-
-Set the `@servers` ssh login command in Envoy.blade.php to your server's username, host name and optional port.
 
 You should set your website root directory (in vhost / server config) to `$path`/current (e.g /var/www/default/current)
 

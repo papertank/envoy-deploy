@@ -1,8 +1,13 @@
-@servers(['web' => 'vagrant@127.0.0.1 -p 2222'])
-
 @include('envoy.config.php');
 
+@servers(['web' => $ssh])
+
 @setup
+	if ( ! isset($ssh) ) {
+		throw new Exception('SSH login username/host is not set');
+	}
+
+
 	if ( ! isset($repo) ) {
 		throw new Exception('Git repository is not set');
 	}
