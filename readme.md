@@ -83,6 +83,13 @@ This has only been tested so far with a Laravel Homestead / Vagrant VM. Use on a
 
 Please submit improvements and fixes :)
 
+## Credits
+
+ * [Servers for Hackers](https://serversforhackers.com/video/enhancing-envoy-deployment) for inspiration
+ * [@noeldiaz on Laracasts](https://laracasts.com/@noeldiaz) for deployment cleanups
+ * [Harmen Stoppels](https://serversforhackers.com/video/enhancing-envoy-deployment#comment-1900893160) for cloning HEAD only
+
+
 ## Author
 
 [Papertank Limited](http://papertank.co.uk)
