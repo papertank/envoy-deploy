@@ -60,4 +60,7 @@
 	rm {{ $path }}/current;
 	ln -s {{ $release }} {{ $path }}/current;
 	echo "Deployment ({{ $date }}) complete";
+	cd {{ $path }};
+	ls -1d 20* | head -n -5 | xargs -d '\n' rm -Rf;
+	echo "Cleanup up old deploments";
 @endtask
