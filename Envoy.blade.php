@@ -47,11 +47,11 @@
 
 @task('deploy')
 	cd {{ $path }};
-    git clone {{ $repo }} --branch={{ $branch }} {{ $release }};
-    echo "Repository cloned";
-    rm -rf {{ $release }}/storage;
-    ln -s {{ $path }}/storage {{ $release }}/storage;
-    echo "Storage directory set up";
+	git clone {{ $repo }} --branch={{ $branch }} {{ $release }};
+	echo "Repository cloned";
+	rm -rf {{ $release }}/storage;
+	ln -s {{ $path }}/storage {{ $release }}/storage;
+	echo "Storage directory set up";
 	ln -s {{ $path }}/.env {{ $release }}/.env;
 	echo "Environment file set up";
 	cd {{ $release }};
