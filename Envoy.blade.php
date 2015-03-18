@@ -30,7 +30,7 @@
 
 @task('init')
 	cd {{ $path }};
-	git clone {{ $repo }} --branch={{ $branch }} {{ $release }};
+	git clone {{ $repo }} --branch={{ $branch }} --depth=1 {{ $release }};
 	echo "Repository cloned";
 	mv {{ $release }}/storage {{ $path }}/storage;
 	ln -s {{ $path }}/storage {{ $release }}/storage;
@@ -47,7 +47,7 @@
 
 @task('deploy')
 	cd {{ $path }};
-	git clone {{ $repo }} --branch={{ $branch }} {{ $release }};
+	git clone {{ $repo }} --branch={{ $branch }} --depth=1 {{ $release }};
 	echo "Repository cloned";
 	rm -rf {{ $release }}/storage;
 	ln -s {{ $path }}/storage {{ $release }}/storage;
