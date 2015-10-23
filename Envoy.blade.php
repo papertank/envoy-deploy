@@ -45,6 +45,11 @@
 	echo "Initial deployment ({{ $date }}) complete";
 @endtask
 
+@macro('deploy_cleanup')
+    deploy
+    cleanup
+@endmacro
+
 @task('deploy')
 	cd {{ $path }};
 	git clone {{ $repo }} --branch={{ $branch }} --depth=1 {{ $release }};
@@ -60,7 +65,10 @@
 	rm {{ $path }}/current;
 	ln -s {{ $release }} {{ $path }}/current;
 	echo "Deployment ({{ $date }}) complete";
+@endtask
+
+@task('cleanup')
 	cd {{ $path }};
-	ls -1d 20* | head -n -5 | xargs -d '\n' rm -Rf;
-	echo "Cleanup up old deploments";
+	find . -maxdepth 1 -name "20*" -mmin +2880 | head -n 5 | xargs rm -Rf;
+	echo "Cleaned up old deploments";
 @endtask

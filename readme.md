@@ -46,6 +46,17 @@ You can specify the Laravel environment (for artisan:migrate command) and git br
 
 	envoy run deploy --branch=develop --env=development
 
+## Deploy with Cleanup
+
+If you could like to deploy your repository and cleanup any old deployments at the same time, you can run
+
+	envoy run deploy_cleanup
+
+This will run the deploy script and then delete any old deployments older than 48 hours, limiting the number deleted to 5.
+
+You can also run the cleanup script independently using
+
+	envoy run cleanup
 
 ## How it Works
 
@@ -71,13 +82,13 @@ Inside one of your deployment folders looks like the following (excluded some la
 	
 The deployment folder .env file and storage directory are symlinked to the parent folders in the main (parent) path.
 
-## Todo
-
- * Cleanup old deployment folders
-
 ## Disclaimer
 
 This has only been tested so far with a Laravel Homestead / Vagrant VM. Use on a live server at your own risk and make sure you read through the script and set the config correctly!
+
+## Changes
+
+v1.0.1 - Added `cleanup` task and `deploy_cleanup` macro after changing cleanup command.
 
 ## Contributing
 
@@ -86,7 +97,7 @@ Please submit improvements and fixes :)
 ## Credits
 
  * [Servers for Hackers](https://serversforhackers.com/video/enhancing-envoy-deployment) for inspiration
- * [@noeldiaz on Laracasts](https://laracasts.com/@noeldiaz) for deployment cleanups
+ * [@noeldiaz on Laracasts](https://laracasts.com/@noeldiaz) for deployment cleanups idea
  * [Harmen Stoppels](https://serversforhackers.com/video/enhancing-envoy-deployment#comment-1900893160) for cloning HEAD only
 
 
