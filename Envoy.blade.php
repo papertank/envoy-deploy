@@ -70,5 +70,5 @@
 @task('cleanup')
 	cd {{ $path }};
 	find . -maxdepth 1 -name "20*" -mmin +2880 | head -n 5 | xargs rm -Rf;
-	echo "Cleaned up old deploments";
+	echo "Cleaned up old deployments";
 @endtask
