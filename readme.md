@@ -104,3 +104,22 @@ Please submit improvements and fixes :)
 ## Author
 
 [Papertank Limited](http://papertank.co.uk)
+
+
+Envoy Deploy
+======================
+envoy run deploy
+
+Option
+    --env=ENVIRONMENT        The environment to use. (Default: "production")
+    --branch=BRANCH          The git branch to use. (Default: "master")
+    --cleanup                Whether to cleanup old deployments
+
+--------
+
+envoy run deploy_cleanup
+
+Option
+    --env=ENVIRONMENT        The environment to use. (Default: "production")
+    --branch=BRANCH          The git branch to use. (Default: "master")
+======================
