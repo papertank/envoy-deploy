@@ -1,4 +1,4 @@
-## Laravel Envoy Deploy
+# Laravel Envoy Deploy
 
 This repository includes an Envoy.blade.php script that is designed to provide a basic "zero-downtime" deployment option using the open-source [Laravel Envoy](http://laravel.com/docs/5.4/envoy) tool.
 
@@ -101,7 +101,7 @@ You can specify the Laravel environment (for artisan:migrate command) and git br
 
 	envoy run deploy --branch=develop --env=development
 
-## Deploy with Cleanup
+### Deploy with Cleanup
 
 If you could like to deploy your repository and cleanup any old deployments at the same time, you can run
 
@@ -117,14 +117,14 @@ You can also run the cleanup script independently (without deploying) using
 
 ## Commands
 
-### `envoy run init`
+#### `envoy run init`
 Initialise server for deployments
 
 Options
     --env=ENVIRONMENT        The environment to use. (Default: "production")
     --branch=BRANCH          The git branch to use. (Default: "master")
 
-### `envoy run deploy`
+#### `envoy run deploy`
 Run new deployment
 
 Options
@@ -132,7 +132,7 @@ Options
     --branch=BRANCH          The git branch to use. (Default: "master")
     --cleanup                Whether to cleanup old deployments
 
-### `envoy run deployment_cleanup`
+#### `envoy run deployment_cleanup`
 Delete any old deployments older than 48 hours, limiting the number deleted to 5 (by default).
 
 ## How it Works
