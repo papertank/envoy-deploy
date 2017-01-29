@@ -21,7 +21,7 @@ To download and run out-with your Laravel project, clone this directory and do a
 To use within an existing Larvel 5 project, you simply need to download the `Envoy.blade.php` file to your project root:
 
 ```
-wget https://raw.githubusercontent.com/papertank/envoy-deploy/master/Envoy.blade.php Envoy.blade.php
+wget https://raw.githubusercontent.com/papertank/envoy-deploy/master/Envoy.blade.php
 ```
 
 ## Setup
