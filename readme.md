@@ -48,7 +48,7 @@ The `DEPLOY_PATH` (server path) should already be created in your server and mus
 
 ### Host
 
-Envoy Deploy uses symlinks to ensure that your server is always running from the latest deployment. As such you need to setup your Apache or Nginx host to point towards the `host/current/public` directory rather than simply `host/public`. 
+Envoy Deploy uses symlinks to ensure that your server is always running from the latest deployment. As such you need to setup your Apache or Nginx host to point towards the `host/current/public` directory rather than simply `host/public`.
 
 For example:
 
@@ -83,13 +83,9 @@ When you're happy with the config, run the init task on your local machine by ru
 
 	envoy run init
 
-You can specify the Laravel environment (for artisan:migrate command) and git branch as options
-
-	envoy run init --branch=develop --env=development
-
 You only need to run the init task once.
 
-The init task creates a `.env` file in your root path (from your `.env.example` file), so make sure and update the environment variables appropriately.
+The init task creates a `.env` file in your root path (from your `.env.example` file), so make sure and update the environment variables appropriately. Once you have run the init task, you should proceed to run the deploy task (below).
 
 ### Deploy
 
@@ -139,9 +135,8 @@ Delete any old deployments older than 48 hours, limiting the number deleted to 5
 
 Your `$path` directory will look something like this after you init and then deploy.
 
-	20150317110501/
-	20150317114500/
-	current -> ./20150317114500
+	20170910131419/
+	current -> ./20170910131419
 	storage/
 	.env
 
@@ -156,7 +151,7 @@ Inside one of your deployment folders looks like the following (excluded some la
 	.env -> ../.env
 	storage -> ../storage
 	vendor/
-	
+
 The deployment folder .env file and storage directory are symlinked to the parent folders in the main (parent) path.
 
 ## Disclaimer
@@ -164,6 +159,8 @@ The deployment folder .env file and storage directory are symlinked to the paren
 Before using on live server, it is best to test on a local VM (like [Laravel Hometead](https://laravel.com/docs/5.4/homestead)) first.
 
 ## Changes
+
+V2.1 - Updated init to only initialize (rather than deploy).
 
 v2.0 - Switched to using DotEnv (removing `envoy.config.php`) and cleaned up tasks/stories.
 
