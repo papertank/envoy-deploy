@@ -93,9 +93,9 @@
 
 @task('deployment_cache')
 	php {{ $release }}/artisan view:clear --quiet
-  php {{ $release }}/artisan cache:clear --quiet
-  php {{ $release }}/artisan config:cache --quiet
-  echo 'Cache cleared'
+	php {{ $release }}/artisan cache:clear --quiet
+	php {{ $release }}/artisan config:cache --quiet
+	echo 'Cache cleared'
 @endtask
 
 @task('deployment_optimize')
@@ -117,8 +117,8 @@
 	cd {{ $path }}
 	@if ( isset($cleanup) && $cleanup )
 	find . -maxdepth 1 -name "20*" -mmin +2880 | head -n 5 | xargs rm -Rf
-	echo "Cleaned up old deploments"
-  @endif
+	echo "Cleaned up old deployments"
+	@endif
 @endtask
 
 {{--
