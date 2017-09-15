@@ -156,7 +156,7 @@ The deployment folder .env file and storage directory are symlinked to the paren
 
 ## Disclaimer
 
-Before using on live server, it is best to test on a local VM (like [Laravel Hometead](https://laravel.com/docs/5.4/homestead)) first.
+Before using on live server, it is best to test on a local VM (like [Laravel Homestead](https://laravel.com/docs/5.4/homestead)) first.
 
 ## Changes
 
