@@ -10,7 +10,7 @@ This Envoy script is designed to be used with Laravel 5 projects and can be used
 
 Your must have Envoy installed using the Composer global command:
 
-	composer global require "laravel/envoy=~1.0"
+	composer global require "laravel/envoy"
 
 ### Standalone
 
@@ -35,6 +35,7 @@ The following configuration items are required:
   - `DEPLOY_SERVER`
   - `DEPLOY_REPOSITORY`
   - `DEPLOY_PATH`
+  - `DEPLOY_HEALTH_CHECK`
 
 For example, deploying the standard Laravel repository on a Forge server, we might use:
 
@@ -42,6 +43,7 @@ For example, deploying the standard Laravel repository on a Forge server, we mig
 DEPLOY_SERVER=forge@example.com
 DEPLOY_REPOSITORY=https://github.com/laravel/laravel.git
 DEPLOY_PATH=/home/forge/example.com
+DEPLOY_HEALTH_CHECK=https://example.forge.com
 ```
 
 The `DEPLOY_PATH` (server path) should already be created in your server and must be a blank directory.
@@ -129,7 +131,11 @@ Options
     --cleanup                Whether to cleanup old deployments
 
 #### `envoy run deployment_cleanup`
-Delete any old deployments older than 48 hours, limiting the number deleted to 5 (by default).
+Delete any old deployments leaving just the last 4
+
+
+#### `envoy run rollback`
+In case the healt check does not work, you can rollback and it will use the previous deploy
 
 ## How it Works
 
@@ -159,6 +165,7 @@ The deployment folder .env file and storage directory are symlinked to the paren
 Before using on live server, it is best to test on a local VM (like [Laravel Homestead](https://laravel.com/docs/5.4/homestead)) first.
 
 ## Changes
+V2.2 - Added health check and rollback option and `cleanup` deletes old deploys except last 4
 
 V2.1 - Updated init to only initialize (rather than deploy).
 
@@ -175,6 +182,7 @@ Please submit improvements and fixes :)
  * [Servers for Hackers](https://serversforhackers.com/video/enhancing-envoy-deployment) for inspiration
  * [@noeldiaz on Laracasts](https://laracasts.com/@noeldiaz) for deployment cleanups idea
  * [Harmen Stoppels](https://serversforhackers.com/video/enhancing-envoy-deployment#comment-1900893160) for cloning HEAD only
+ * [Jordi Puigdellívol @badchoice](https://github.com/BadChoice) for V2.2 updates
 
 
 ## Author
