@@ -116,6 +116,12 @@
 	@endif
 @endtask
 
+@task('rollback')
+	cd {{ $path }}
+	ln -nfs {{ $path }}/$(find . -maxdepth 1 -name "20*" | sort  | tail -n 2 | head -n1) {{ $path }}/current
+	echo "Rolled back to $(find . -maxdepth 1 -name "20*" | sort  | tail -n 2 | head -n1)"
+@endtask
+
 {{--
 @after
 	@slack($slack, '#deployments', "Deployment on {$server}: {$date} complete")
