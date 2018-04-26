@@ -12,6 +12,7 @@
 	$repo = getenv('DEPLOY_REPOSITORY');
 	$path = getenv('DEPLOY_PATH');
 	$slack = getenv('DEPLOY_SLACK_WEBHOOK');
+	$healthUrl = getenv('DEPLOY_HEALTH_CHECK');
 
 	if ( substr($path, 0, 1) !== '/' ) throw new Exception('Careful - your deployment path does not begin with /');
 
@@ -114,6 +115,15 @@
 	find . -maxdepth 1 -name "20*" -mmin +2880 | head -n 5 | xargs rm -Rf
 	echo "Cleaned up old deployments"
 	@endif
+@endtask
+
+@task('health_check')
+	if [ "$(curl --write-out "%{http_code}\n" --silent --output /dev/null {{ $healthUrl }})" == "200" ]; then
+		echo "Health check to {{ $healthUrl }} OK"
+	else	
+		echo "/!\ Health check to {{ $healthUrl }} FAILED!!"
+		echo "$(curl -Is {{ $healthUrl }} | head -n 1)"
+	fi	
 @endtask
 
 @task('rollback')
