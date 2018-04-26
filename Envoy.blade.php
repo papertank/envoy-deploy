@@ -49,7 +49,6 @@
 	deployment_composer
 	deployment_migrate
 	deployment_cache
-	deployment_optimize
 	deployment_finish
 	deployment_option_cleanup
 @endstory
@@ -84,7 +83,7 @@
 
 @task('deployment_composer')
 	cd {{ $release }}
-	composer install --no-interaction --quiet --no-dev
+	composer install --no-interaction --quiet --no-dev --prefer-dist --optimize-autoloader
 @endtask
 
 @task('deployment_migrate')
@@ -96,10 +95,6 @@
 	php {{ $release }}/artisan cache:clear --quiet
 	php {{ $release }}/artisan config:cache --quiet
 	echo 'Cache cleared'
-@endtask
-
-@task('deployment_optimize')
-	php {{ $release }}/artisan optimize --quiet
 @endtask
 
 @task('deployment_finish')
