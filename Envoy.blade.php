@@ -47,7 +47,7 @@
 @endtask
 
 @story('deploy')
-	deployment_init
+	deployment_start
 	deployment_links
 	deployment_composer
 	deployment_migrate
@@ -58,7 +58,7 @@
 @endstory
 
 @story('deploy_cleanup')
-	deployment_git
+	deployment_start
 	deployment_links
 	deployment_composer
 	deployment_migrate
@@ -74,7 +74,7 @@
 	health_check
 @endstory
 
-@task('deployment_init')
+@task('deployment_start')
 	cd {{ $path }}
 	echo "Deployment ({{ $date }}) started"
 	git clone {{ $repo }} --branch={{ $branch }} --depth=1 -q {{ $release }}
