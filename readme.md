@@ -35,7 +35,6 @@ The following configuration items are required:
   - `DEPLOY_SERVER`
   - `DEPLOY_REPOSITORY`
   - `DEPLOY_PATH`
-  - `DEPLOY_HEALTH_CHECK`
 
 For example, deploying the standard Laravel repository on a Forge server, we might use:
 
@@ -129,7 +128,8 @@ To rollback to the previous deployment (e.g. when a health check fails), you can
 
 ## Commands
 
-#### `envoy run init`
+#### `envoy run init`
+
 Initialise server for deployments
 
     Options
@@ -137,6 +137,7 @@ Initialise server for deployments
         --branch=BRANCH          The git branch to use. (Default: "master")
 
 #### `envoy run deploy`
+
 Run new deployment
 
     Options
@@ -145,9 +146,11 @@ Run new deployment
         --cleanup                Whether to cleanup old deployments
 
 #### `envoy run deployment_cleanup`
+
 Delete any old deployments, leaving just the last 4.
 
 #### `envoy run rollback`
+
 In case the health check does not work, you can rollback and it will use the previous deploy.
 
 ## How it Works
