@@ -23,9 +23,7 @@
 	$release = $path.'/'.$date;
 @endsetup
 
-
- @servers(['web' => $server])
-{{--@servers(['localhost' => '127.0.0.1'])--}}
+@servers(['web' => $server])
 
 @task('init')
 	if [ ! -d {{ $path }}/current ]; then
@@ -106,7 +104,7 @@
 	php {{ $release }}/artisan cache:clear --quiet
 	php {{ $release }}/artisan config:cache --quiet
 	php {{ $release }}/artisan queue:restart --quiet
-	echo 'Cache cleared'
+	echo "Cache cleared"
 @endtask
 
 @task('deployment_finish')
@@ -116,7 +114,6 @@
 
 @task('deployment_cleanup')
 	cd {{ $path }}
-	#find . -maxdepth 1 -name "20*" -mmin +2880 | head -n 5 | xargs rm -Rf
 	find . -maxdepth 1 -name "20*" | sort | head -n -4 | xargs rm -Rf
 	echo "Cleaned up old deployments"
 @endtask
@@ -124,7 +121,6 @@
 @task('deployment_option_cleanup')
 	cd {{ $path }}
 	@if ( isset($cleanup) && $cleanup )
-		#find . -maxdepth 1 -name "20*" -mmin +2880 | head -n 5 | xargs rm -Rf
 		find . -maxdepth 1 -name "20*" | sort | head -n -4 | xargs rm -Rf
 		echo "Cleaned up old deployments"
 	@endif
@@ -138,6 +134,8 @@
 		else
 			printf "\033[1;31mHealth check to {{ $healthUrl }} FAILED\033[0m\n"
 		fi
+	@else
+		echo "No health check set"
 	@endif	
 @endtask
 
