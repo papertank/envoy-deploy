@@ -16,7 +16,7 @@
 
 	if ( substr($path, 0, 1) !== '/' ) throw new Exception('Careful - your deployment path does not begin with /');
 
-	$date = ( new DateTime )->format('Y-m-d_H:i:s');
+	$date = ( new DateTime )->format('YmdHis'); //If you want a clear format you can use 'Y-m-d_H:i:s'
 	$env = isset($env) ? $env : "production";
 	$branch = isset($branch) ? $branch : "master";
 	$path = rtrim($path, '/');
@@ -47,12 +47,12 @@
 @endtask
 
 @story('deploy')
-	deployment_git
+	deployment_init
 	deployment_links
 	deployment_composer
 	deployment_migrate
 	deployment_cache
-	deployment_update_current
+	deployment_finish
 	health_check
 	deployment_option_cleanup
 @endstory
@@ -74,7 +74,7 @@
 	health_check
 @endstory
 
-@task('deployment_git')
+@task('deployment_init')
 	cd {{ $path }}
 	echo "Deployment ({{ $date }}) started"
 	git clone {{ $repo }} --branch={{ $branch }} --depth=1 -q {{ $release }}
@@ -109,7 +109,7 @@
 	echo 'Cache cleared'
 @endtask
 
-@task('deployment_update_current')
+@task('deployment_finish')
 	ln -nfs {{ $release }} {{ $path }}/current
 	echo "Deployment ({{ $date }}) finished"
 @endtask
@@ -132,11 +132,13 @@
 
 
 @task('health_check')
-	if [ "$(curl --write-out "%{http_code}\n" --silent --output /dev/null {{ $healthUrl }})" == "200" ]; then
-		printf "\033[0;32mHealth check to {{ $healthUrl }} OK\033[0m\n"
-	else
-		printf "\033[1;31mHealth check to {{ $healthUrl }} FAILED\033[0m\n"
-	fi
+	@if ( ! empty($healthUrl) ) 
+		if [ "$(curl --write-out "%{http_code}\n" --silent --output /dev/null {{ $healthUrl }})" == "200" ]; then
+			printf "\033[0;32mHealth check to {{ $healthUrl }} OK\033[0m\n"
+		else
+			printf "\033[1;31mHealth check to {{ $healthUrl }} FAILED\033[0m\n"
+		fi
+	@endif	
 @endtask
 
 
