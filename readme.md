@@ -113,29 +113,42 @@ You can also run the cleanup script independently (without deploying) using
 
 	envoy run deployment_cleanup
 
+### Health Check
+
+If you would like to perform a health check (for 200 response) after deploying, simply add your site's URL in the .env file:
+
+```
+DEPLOY_HEALTH_CHECK=https://example.forge.com
+```
+
+### Rollback
+
+To rollback to the previous deployment (e.g. when a health check fails), you can simply run 
+
+	envoy run rollback
+
 ## Commands
 
 #### `envoy run init`
 Initialise server for deployments
 
-Options
-    --env=ENVIRONMENT        The environment to use. (Default: "production")
-    --branch=BRANCH          The git branch to use. (Default: "master")
+    Options
+        --env=ENVIRONMENT        The environment to use. (Default: "production")
+        --branch=BRANCH          The git branch to use. (Default: "master")
 
 #### `envoy run deploy`
 Run new deployment
 
-Options
-    --env=ENVIRONMENT        The environment to use. (Default: "production")
-    --branch=BRANCH          The git branch to use. (Default: "master")
-    --cleanup                Whether to cleanup old deployments
+    Options
+        --env=ENVIRONMENT        The environment to use. (Default: "production")
+        --branch=BRANCH          The git branch to use. (Default: "master")
+        --cleanup                Whether to cleanup old deployments
 
 #### `envoy run deployment_cleanup`
-Delete any old deployments leaving just the last 4
-
+Delete any old deployments, leaving just the last 4.
 
 #### `envoy run rollback`
-In case the healt check does not work, you can rollback and it will use the previous deploy
+In case the health check does not work, you can rollback and it will use the previous deploy.
 
 ## How it Works
 
@@ -165,7 +178,12 @@ The deployment folder .env file and storage directory are symlinked to the paren
 Before using on live server, it is best to test on a local VM (like [Laravel Homestead](https://laravel.com/docs/5.4/homestead)) first.
 
 ## Changes
-V2.2 - Added health check and rollback option and `cleanup` deletes old deploys except last 4
+V2.2
+- Added `health_check` task and config.
+- Added `rollback` task to update current to previous deployment.
+- Updated `cleanup` to delete old deploys and leave last 4.
+- Removed `deployment_optimize` task (no longer needed for Laravel 5 projects).
+- Updated `deployment_composer` to use `--prefer-dist --optimize-autoloader` options.
 
 V2.1 - Updated init to only initialize (rather than deploy).
 
@@ -182,7 +200,7 @@ Please submit improvements and fixes :)
  * [Servers for Hackers](https://serversforhackers.com/video/enhancing-envoy-deployment) for inspiration
  * [@noeldiaz on Laracasts](https://laracasts.com/@noeldiaz) for deployment cleanups idea
  * [Harmen Stoppels](https://serversforhackers.com/video/enhancing-envoy-deployment#comment-1900893160) for cloning HEAD only
- * [Jordi Puigdellívol @badchoice](https://github.com/BadChoice) for V2.2 updates
+ * [Jordi Puigdellívol @badchoice](https://github.com/BadChoice) for V2.2 updates (health check and rollback).
 
 
 ## Author
