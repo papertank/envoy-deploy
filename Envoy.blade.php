@@ -12,17 +12,20 @@
 	$repo = getenv('DEPLOY_REPOSITORY');
 	$path = getenv('DEPLOY_PATH');
 	$slack = getenv('DEPLOY_SLACK_WEBHOOK');
+	$healthUrl = getenv('DEPLOY_HEALTH_CHECK');
 
 	if ( substr($path, 0, 1) !== '/' ) throw new Exception('Careful - your deployment path does not begin with /');
 
-	$date = ( new DateTime )->format('YmdHis');
+	$date = ( new DateTime )->format('YmdHis'); //If you want a clear format you can use 'Y-m-d_H:i:s'
 	$env = isset($env) ? $env : "production";
 	$branch = isset($branch) ? $branch : "master";
 	$path = rtrim($path, '/');
 	$release = $path.'/'.$date;
 @endsetup
 
-@servers(['web' => $server])
+
+ @servers(['web' => $server])
+{{--@servers(['localhost' => '127.0.0.1'])--}}
 
 @task('init')
 	if [ ! -d {{ $path }}/current ]; then
@@ -49,8 +52,8 @@
 	deployment_composer
 	deployment_migrate
 	deployment_cache
-	deployment_optimize
 	deployment_finish
+	health_check
 	deployment_option_cleanup
 @endstory
 
@@ -61,8 +64,14 @@
 	deployment_migrate
 	deployment_cache
 	deployment_optimize
-	deployment_finish
+	deployment_update_current
+	health_check
 	deployment_cleanup
+@endstory
+
+@story('rollback')
+	deployment_rollback
+	health_check
 @endstory
 
 @task('deployment_start')
@@ -83,8 +92,9 @@
 @endtask
 
 @task('deployment_composer')
+	echo "Installing composer depencencies..."
 	cd {{ $release }}
-	composer install --no-interaction --quiet --no-dev
+	composer install --no-interaction --quiet --no-dev --prefer-dist --optimize-autoloader
 @endtask
 
 @task('deployment_migrate')
@@ -95,11 +105,8 @@
 	php {{ $release }}/artisan view:clear --quiet
 	php {{ $release }}/artisan cache:clear --quiet
 	php {{ $release }}/artisan config:cache --quiet
+	php {{ $release }}/artisan queue:restart --quiet
 	echo 'Cache cleared'
-@endtask
-
-@task('deployment_optimize')
-	php {{ $release }}/artisan optimize --quiet
 @endtask
 
 @task('deployment_finish')
@@ -109,20 +116,42 @@
 
 @task('deployment_cleanup')
 	cd {{ $path }}
-	find . -maxdepth 1 -name "20*" -mmin +2880 | head -n 5 | xargs rm -Rf
+	#find . -maxdepth 1 -name "20*" -mmin +2880 | head -n 5 | xargs rm -Rf
+	find . -maxdepth 1 -name "20*" | sort | head -n -4 | xargs rm -Rf
 	echo "Cleaned up old deployments"
 @endtask
 
 @task('deployment_option_cleanup')
 	cd {{ $path }}
 	@if ( isset($cleanup) && $cleanup )
-	find . -maxdepth 1 -name "20*" -mmin +2880 | head -n 5 | xargs rm -Rf
-	echo "Cleaned up old deployments"
+		#find . -maxdepth 1 -name "20*" -mmin +2880 | head -n 5 | xargs rm -Rf
+		find . -maxdepth 1 -name "20*" | sort | head -n -4 | xargs rm -Rf
+		echo "Cleaned up old deployments"
 	@endif
 @endtask
 
+
+@task('health_check')
+	@if ( ! empty($healthUrl) ) 
+		if [ "$(curl --write-out "%{http_code}\n" --silent --output /dev/null {{ $healthUrl }})" == "200" ]; then
+			printf "\033[0;32mHealth check to {{ $healthUrl }} OK\033[0m\n"
+		else
+			printf "\033[1;31mHealth check to {{ $healthUrl }} FAILED\033[0m\n"
+		fi
+	@endif	
+@endtask
+
+
+@task('deployment_rollback')
+	cd {{ $path }}
+	ln -nfs {{ $path }}/$(find . -maxdepth 1 -name "20*" | sort  | tail -n 2 | head -n1) {{ $path }}/current
+	echo "Rolled back to $(find . -maxdepth 1 -name "20*" | sort  | tail -n 2 | head -n1)"
+@endtask
+
 {{--
-@after
+@finished
 	@slack($slack, '#deployments', "Deployment on {$server}: {$date} complete")
-@endafter
+@endfinished
 --}}
+
+
