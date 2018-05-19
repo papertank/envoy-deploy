@@ -61,8 +61,7 @@
 	deployment_composer
 	deployment_migrate
 	deployment_cache
-	deployment_optimize
-	deployment_update_current
+	deployment_finish
 	health_check
 	deployment_cleanup
 @endstory
@@ -103,11 +102,12 @@
 	php {{ $release }}/artisan view:clear --quiet
 	php {{ $release }}/artisan cache:clear --quiet
 	php {{ $release }}/artisan config:cache --quiet
-	php {{ $release }}/artisan queue:restart --quiet
 	echo "Cache cleared"
 @endtask
 
 @task('deployment_finish')
+	php {{ $release }}/artisan queue:restart --quiet
+	echo "Queue restarted"
 	ln -nfs {{ $release }} {{ $path }}/current
 	echo "Deployment ({{ $date }}) finished"
 @endtask
@@ -128,7 +128,7 @@
 
 
 @task('health_check')
-	@if ( ! empty($healthUrl) ) 
+	@if ( ! empty($healthUrl) )
 		if [ "$(curl --write-out "%{http_code}\n" --silent --output /dev/null {{ $healthUrl }})" == "200" ]; then
 			printf "\033[0;32mHealth check to {{ $healthUrl }} OK\033[0m\n"
 		else
@@ -136,7 +136,7 @@
 		fi
 	@else
 		echo "No health check set"
-	@endif	
+	@endif
 @endtask
 
 
