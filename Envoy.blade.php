@@ -16,7 +16,7 @@
 
 	if ( substr($path, 0, 1) !== '/' ) throw new Exception('Careful - your deployment path does not begin with /');
 
-	$date = ( new DateTime )->format('YmdHis'); //If you want a clear format you can use 'Y-m-d_H:i:s'
+	$date = ( new DateTime )->format('YmdHis');
 	$env = isset($env) ? $env : "production";
 	$branch = isset($branch) ? $branch : "master";
 	$path = rtrim($path, '/');
