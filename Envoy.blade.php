@@ -1,5 +1,6 @@
+@include('vendor/autoload.php')
+
 @setup
-	require __DIR__.'/vendor/autoload.php';
 	$dotenv = Dotenv\Dotenv::create(__DIR__);
 	try {
 		$dotenv->load();
