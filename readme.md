@@ -1,10 +1,10 @@
 # Laravel Envoy Deploy
 
-This repository includes an Envoy.blade.php script that is designed to provide a basic "zero-downtime" deployment option using the open-source [Laravel Envoy](http://laravel.com/docs/5.4/envoy) tool.
+This repository includes an Envoy.blade.php script that is designed to provide a basic "zero-downtime" deployment option using the open-source [Laravel Envoy](http://laravel.com/docs/7.x/envoy) tool.
 
 ## Requirements
 
-This Envoy script is designed to be used with Laravel 5 projects and can be used within the Laravel root, or downloaded separately and included in your Laravel project.
+This Envoy script is designed to be used with Laravel 5-7 projects and can be used within the Laravel root, or downloaded separately and included in your Laravel project.
 
 ## Installation
 
@@ -18,10 +18,20 @@ To download and run out-with your Laravel project, clone this directory and do a
 
 ### Laravel
 
-To use within an existing Laravel 5 project, you simply need to download the `Envoy.blade.php` file to your project root:
+#### Laravel 7
+
+To use within an existing Laravel 7 project, you simply need to download the version 3 `Envoy.blade.php` file to your project root:
 
 ```
 wget https://raw.githubusercontent.com/papertank/envoy-deploy/master/Envoy.blade.php
+```
+
+#### Laravel 5-6
+
+To use within an existing Laravel 5 or 6 project, you simply need to download the version 2 `Envoy.blade.php` file to your project root:
+
+```
+wget https://raw.githubusercontent.com/papertank/envoy-deploy/v2/Envoy.blade.php
 ```
 
 ## Setup
@@ -178,9 +188,12 @@ The deployment folder .env file and storage directory are symlinked to the paren
 
 ## Disclaimer
 
-Before using on live server, it is best to test on a local VM (like [Laravel Homestead](https://laravel.com/docs/5.4/homestead)) first.
+Before using on live server, it is best to test on a local VM (like [Laravel Homestead](https://laravel.com/docs/7.x/homestead)) first.
 
 ## Changes
+V3.0
+- Updated DotEnv to "^4.0" for Laravel 7 compatibility.
+
 V2.2
 - Added `health_check` task and config.
 - Added `rollback` task to update current to previous deployment.
