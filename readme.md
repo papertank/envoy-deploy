@@ -18,7 +18,7 @@ To download and run out-with your Laravel project, clone this directory and do a
 
 ### Laravel
 
-#### Laravel 7
+#### Laravel 7
 
 To use within an existing Laravel 7 project, you simply need to download the version 3 `Envoy.blade.php` file to your project root:
 
