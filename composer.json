@@ -1,5 +1,6 @@
 {
     "require": {
+        "php": "^7.0",
         "vlucas/phpdotenv": "^4.0"
     }
 }
