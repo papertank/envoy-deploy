@@ -8,11 +8,11 @@
 		echo $e->getMessage();
 	}
 
-	$server = getenv('DEPLOY_SERVER');
-	$repo = getenv('DEPLOY_REPOSITORY');
-	$path = getenv('DEPLOY_PATH');
-	$slack = getenv('DEPLOY_SLACK_WEBHOOK');
-	$healthUrl = getenv('DEPLOY_HEALTH_CHECK');
+	$server = $_ENV['DEPLOY_SERVER'] ?? null;
+	$repo = $_ENV['DEPLOY_REPOSITORY'] ?? null;
+	$path = $_ENV['DEPLOY_PATH'] ?? null;
+	$slack = $_ENV['DEPLOY_SLACK_WEBHOOK'] ?? null;
+	$healthUrl = $_ENV['DEPLOY_HEALTH_CHECK'] ?? null;
 
 	if ( substr($path, 0, 1) !== '/' ) throw new Exception('Careful - your deployment path does not begin with /');
 
