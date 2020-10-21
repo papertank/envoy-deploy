@@ -6,6 +6,7 @@
 		$dotenv->required(['DEPLOY_SERVER', 'DEPLOY_REPOSITORY', 'DEPLOY_PATH'])->notEmpty();
 	} catch ( Exception $e )  {
 		echo $e->getMessage();
+		exit;
 	}
 
 	$server = getenv('DEPLOY_SERVER');
