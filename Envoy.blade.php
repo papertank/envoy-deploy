@@ -51,6 +51,8 @@
 	deployment_composer
 	deployment_migrate
 	deployment_cache
+	deployment_npm
+	deployment_asset
 	deployment_finish
 	health_check
 	deployment_option_cleanup
@@ -62,6 +64,8 @@
 	deployment_composer
 	deployment_migrate
 	deployment_cache
+	deployment_npm
+	deployment_asset
 	deployment_finish
 	health_check
 	deployment_cleanup
@@ -104,6 +108,18 @@
 	php {{ $release }}/artisan cache:clear --quiet
 	php {{ $release }}/artisan config:cache --quiet
 	echo "Cache cleared"
+@endtask
+
+@task('deployment_npm')
+	echo "Installing node package dependencies..."
+	cd {{ $release }}
+	npm install --no-audit --no-fund
+@endtask
+
+@task('deployment_asset')
+	echo "Build asset with Mix..."
+	cd {{ $release }}
+	npm run {{ $env }}
 @endtask
 
 @task('deployment_finish')
