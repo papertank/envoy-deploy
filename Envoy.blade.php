@@ -90,7 +90,7 @@
 @endtask
 
 @task('deployment_composer')
-	echo "Installing composer depencencies..."
+	echo "Installing composer dependencies..."
 	cd {{ $release }}
 	composer install --no-interaction --quiet --no-dev --prefer-dist --optimize-autoloader
 @endtask
