@@ -21,7 +21,7 @@
 	$env = isset($env) ? $env : "production";
 	$branch = isset($branch) ? $branch : "master";
 	$path = rtrim($path, '/');
-	$release = $path.'/'.$date;
+	$release = $path.'/releases/'.$date;
 @endsetup
 
 @servers(['web' => $server])
@@ -122,13 +122,13 @@
 @endtask
 
 @task('deployment_cleanup')
-	cd {{ $path }}
+	cd {{ $path }}/releases
 	find . -maxdepth 1 -name "20*" | sort | head -n -4 | xargs rm -Rf
 	echo "Cleaned up old deployments"
 @endtask
 
 @task('deployment_option_cleanup')
-	cd {{ $path }}
+	cd {{ $path }}/releases
 	@if ( isset($cleanup) && $cleanup )
 		find . -maxdepth 1 -name "20*" | sort | head -n -4 | xargs rm -Rf
 		echo "Cleaned up old deployments"
@@ -150,8 +150,8 @@
 
 
 @task('deployment_rollback')
-	cd {{ $path }}
-	ln -nfs {{ $path }}/$(find . -maxdepth 1 -name "20*" | sort  | tail -n 2 | head -n1) {{ $path }}/current
+	cd {{ $path }}/releases
+	ln -nfs {{ $path }}/releases/$(find . -maxdepth 1 -name "20*" | sort  | tail -n 2 | head -n1) {{ $path }}/current
 	echo "Rolled back to $(find . -maxdepth 1 -name "20*" | sort  | tail -n 2 | head -n1)"
 @endtask
 

@@ -4,7 +4,7 @@ This repository includes an Envoy.blade.php script that is designed to provide a
 
 ## Requirements
 
-This Envoy script is designed to be used with Laravel 5-7 projects and can be used within the Laravel root, or downloaded separately and included in your Laravel project.
+This Envoy script is designed to be used with Laravel 7+ projects and can be used within the Laravel root, or downloaded separately and included in your Laravel project.
 
 ## Installation
 
@@ -18,9 +18,9 @@ To download and run out-with your Laravel project, clone this directory and do a
 
 ### Laravel
 
-#### Laravel 7
+#### Laravel 7+
 
-To use within an existing Laravel 7 project, you simply need to download the version 3 `Envoy.blade.php` file to your project root:
+To use within an existing Laravel 7+ project, you simply need to download the version 4 `Envoy.blade.php` file to your project root:
 
 ```
 wget https://raw.githubusercontent.com/papertank/envoy-deploy/master/Envoy.blade.php
@@ -75,7 +75,7 @@ server {
 
     location ~ \.php$ {
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
+        fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
         fastcgi_index index.php;
         include fastcgi_params;
     }
@@ -104,7 +104,7 @@ Each time you want to deploy simply run the deploy task on your local machine in
 
 	envoy run deploy
 
-You can specify the Laravel environment (for artisan:migrate command) and git branch as options
+You can specify the Laravel environment (e.g. for artisan:migrate command) and git branch as options
 
 	envoy run deploy --branch=develop --env=development
 
@@ -113,8 +113,6 @@ You can specify the Laravel environment (for artisan:migrate command) and git br
 If you could like to deploy your repository and cleanup any old deployments at the same time, you can run
 
 	envoy run deploy --cleanup
-
-Or alternatively, if you need to:
 
 This will run the deploy script and then delete any old deployments older than 48 hours, limiting the number deleted to 5.
 
@@ -167,8 +165,8 @@ In case the health check does not work, you can rollback and it will use the pre
 
 Your `$path` directory will look something like this after you init and then deploy.
 
-	20170910131419/
-	current -> ./20170910131419
+	releases/
+	current -> ./releases/20220103125914
 	storage/
 	.env
 
@@ -239,6 +237,7 @@ Before using on live server, it is best to test on a local VM (like [Laravel Hom
 ## Changes
 V4.0
 - Added optional deployment_npm task (disabled by default).
+- Tidied up deployments into releases folder.
 
 V3.0
 - Updated DotEnv to "^4.0" for Laravel 7 compatibility.
