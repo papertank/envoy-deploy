@@ -114,7 +114,7 @@ If you could like to deploy your repository and cleanup any old deployments at t
 
 	envoy run deploy --cleanup
 
-This will run the deploy script and then delete any old deployments older than 48 hours, limiting the number deleted to 5.
+This will run the deploy script and then delete any old deployments older than 48 hours, leaving at least 4.
 
 You can also run the cleanup script independently (without deploying) using
 
@@ -221,7 +221,7 @@ If you use Laravel mix / npm dependencies in your project, you should add the (d
 	deployment_start
 	deployment_links
 	deployment_composer
-    deployment_npm
+	deployment_npm
 	deployment_migrate
 	deployment_cache
 	deployment_finish
