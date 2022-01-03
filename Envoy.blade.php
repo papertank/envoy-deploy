@@ -56,17 +56,6 @@
 	deployment_option_cleanup
 @endstory
 
-@story('deploy_cleanup')
-	deployment_start
-	deployment_links
-	deployment_composer
-	deployment_migrate
-	deployment_cache
-	deployment_finish
-	health_check
-	deployment_cleanup
-@endstory
-
 @story('rollback')
 	deployment_rollback
 	health_check

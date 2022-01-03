@@ -188,7 +188,7 @@ The deployment folder .env file and storage directory are symlinked to the paren
 
 ### Laravel Mix / NPM
 
-If you use Laravel mix / npm dependencies in your project, you should add the (disabled by default) `deployment_npm` task to the deploy and deploy_cleanup stories. For example:
+If you use Laravel mix / npm dependencies in your project, you should add the (disabled by default) `deployment_npm` task to the deploy story. For example:
 
 ```
 @story('deploy')
@@ -201,18 +201,6 @@ If you use Laravel mix / npm dependencies in your project, you should add the (d
 	deployment_finish
 	health_check
 	deployment_option_cleanup
-@endstory
-
-@story('deploy_cleanup')
-	deployment_start
-	deployment_links
-	deployment_composer
-    deployment_npm
-	deployment_migrate
-	deployment_cache
-	deployment_finish
-	health_check
-	deployment_cleanup
 @endstory
 ```
 
@@ -238,6 +226,7 @@ Before using on live server, it is best to test on a local VM (like [Laravel Hom
 V4.0
 - Added optional deployment_npm task (disabled by default).
 - Tidied up deployments into releases folder.
+- Removed deploy_cleanup story to simplify - use 'envoy run deploy --cleanup'.
 
 V3.0
 - Updated DotEnv to "^4.0" for Laravel 7 compatibility.
