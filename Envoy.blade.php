@@ -99,6 +99,14 @@
 	php {{ $release }}/artisan migrate --env={{ $env }} --force --no-interaction
 @endtask
 
+@task('deployment_npm')
+	echo "Installing npm dependencies..."
+	cd {{ $release }}
+	npm install --no-audit --no-fund --no-optional
+	echo "Running npm..."
+	npm run {{ $env }} --silent
+@endtask
+
 @task('deployment_cache')
 	php {{ $release }}/artisan view:clear --quiet
 	php {{ $release }}/artisan cache:clear --quiet

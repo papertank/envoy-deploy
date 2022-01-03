@@ -1,6 +1,6 @@
 # Laravel Envoy Deploy
 
-This repository includes an Envoy.blade.php script that is designed to provide a basic "zero-downtime" deployment option using the open-source [Laravel Envoy](http://laravel.com/docs/7.x/envoy) tool.
+This repository includes an Envoy.blade.php script that is designed to provide a basic "zero-downtime" deployment option using the open-source [Laravel Envoy](http://laravel.com/docs/8.x/envoy) tool.
 
 ## Requirements
 
@@ -186,11 +186,60 @@ Inside one of your deployment folders looks like the following (excluded some la
 
 The deployment folder .env file and storage directory are symlinked to the parent folders in the main (parent) path.
 
+## Optional Features
+
+### Laravel Mix / NPM
+
+If you use Laravel mix / npm dependencies in your project, you should add the (disabled by default) `deployment_npm` task to the deploy and deploy_cleanup stories. For example:
+
+```
+@story('deploy')
+	deployment_start
+	deployment_links
+	deployment_composer
+    deployment_npm
+	deployment_migrate
+	deployment_cache
+	deployment_finish
+	health_check
+	deployment_option_cleanup
+@endstory
+
+@story('deploy_cleanup')
+	deployment_start
+	deployment_links
+	deployment_composer
+    deployment_npm
+	deployment_migrate
+	deployment_cache
+	deployment_finish
+	health_check
+	deployment_cleanup
+@endstory
+```
+
+If you only use Laravel mix for asset compilation and don't use any node scripts after deployment, you can update your deployment script to remove the node_modules folder and save some disk space on old deployments:
+
+```
+@task('deployment_npm')
+	echo "Installing npm dependencies..."
+	cd {{ $release }}
+	npm install --no-audit --no-fund --no-optional
+	echo "Running npm..."
+	npm run {{ $env }} --silent
+    rm -rf {{ $release }}/node_modules
+@endtask
+```
+
+
 ## Disclaimer
 
-Before using on live server, it is best to test on a local VM (like [Laravel Homestead](https://laravel.com/docs/7.x/homestead)) first.
+Before using on live server, it is best to test on a local VM (like [Laravel Homestead](https://laravel.com/docs/8.x/homestead)) first.
 
 ## Changes
+V4.0
+- Added optional deployment_npm task (disabled by default).
+
 V3.0
 - Updated DotEnv to "^4.0" for Laravel 7 compatibility.
 
