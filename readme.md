@@ -239,7 +239,7 @@ If you only use Laravel mix for asset compilation and don't use any node scripts
 	npm install --no-audit --no-fund --no-optional
 	echo "Running npm..."
 	npm run {{ $env }} --silent
-    rm -rf {{ $release }}/node_modules
+	rm -rf {{ $release }}/node_modules
 @endtask
 ```
 
