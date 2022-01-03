@@ -227,6 +227,7 @@ V4.0
 - Added optional deployment_npm task (disabled by default).
 - Tidied up deployments into releases folder.
 - Removed deploy_cleanup story to simplify - use 'envoy run deploy --cleanup'.
+- Removed storage/public link and replaced with 'php artisan storage:link' command.
 
 V3.0
 - Updated DotEnv to "^4.0" for Laravel 7 compatibility.

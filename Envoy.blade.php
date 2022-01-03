@@ -33,7 +33,6 @@
 		echo "Repository cloned"
 		mv {{ $release }}/storage {{ $path }}/storage
 		ln -s {{ $path }}/storage {{ $release }}/storage
-		ln -s {{ $path }}/storage/public {{ $release }}/public/storage
 		echo "Storage directory set up"
 		cp {{ $release }}/.env.example {{ $path }}/.env
 		ln -s {{ $path }}/.env {{ $release }}/.env
@@ -72,7 +71,6 @@
 	cd {{ $path }}
 	rm -rf {{ $release }}/storage
 	ln -s {{ $path }}/storage {{ $release }}/storage
-	ln -s {{ $path }}/storage/public {{ $release }}/public/storage
 	echo "Storage directories set up"
 	ln -s {{ $path }}/.env {{ $release }}/.env
 	echo "Environment file set up"
@@ -104,6 +102,8 @@
 @endtask
 
 @task('deployment_finish')
+	php {{ $release }}/artisan storage:link
+	echo "Storage symbolic links created"
 	php {{ $release }}/artisan queue:restart --quiet
 	echo "Queue restarted"
 	ln -nfs {{ $release }} {{ $path }}/current
