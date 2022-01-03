@@ -27,7 +27,7 @@
 @servers(['web' => $server])
 
 @task('init')
-	if [ ! -d {{ $path }}/current ]; then
+	if [ ! -d {{ $path }}/storage ]; then
 		cd {{ $path }}
 		git clone {{ $repo }} --branch={{ $branch }} --depth=1 -q {{ $release }}
 		echo "Repository cloned"
@@ -38,9 +38,9 @@
 		ln -s {{ $path }}/.env {{ $release }}/.env
 		echo "Environment file set up"
 		rm -rf {{ $release }}
-		echo "Deployment path initialised. Run 'envoy run deploy' now."
+		echo "Deployment path initialised. Edit {{ $path }}/.env then run 'envoy run deploy'."
 	else
-		echo "Deployment path already initialised (current symlink exists)!"
+		echo "Deployment path already initialised (storage directory exists)!"
 	fi
 @endtask
 
