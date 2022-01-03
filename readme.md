@@ -186,6 +186,32 @@ The deployment folder .env file and storage directory are symlinked to the paren
 
 ## Optional Features
 
+### Laravel Horizon
+
+If you use [Laravel Horizon](https://laravel.com/docs/8.x/horizon) for your Redis queue management, you should update the deployment script to restart queues using Horizon.
+
+Replace:
+
+```
+php {{ $release }}/artisan queue:restart --quiet
+```
+
+With:
+
+```
+php {{ $release }}/artisan horizon:terminate
+```
+
+### Reload PHP FPM
+
+If you use something like OPCache, you should reload the PHP FPM service at the end of each deployment.
+
+Simply add the following to the end of the `deployment_finish` task. Note: you will need to change based on your PHP version and/or server setup.
+
+```
+sudo -S service php7.4-fpm reload
+```
+
 ### Laravel Mix / NPM
 
 If you use Laravel mix / npm dependencies in your project, you should add the (disabled by default) `deployment_npm` task to the deploy story. For example:
@@ -216,7 +242,6 @@ If you only use Laravel mix for asset compilation and don't use any node scripts
     rm -rf {{ $release }}/node_modules
 @endtask
 ```
-
 
 ## Disclaimer
 
