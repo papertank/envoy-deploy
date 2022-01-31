@@ -78,6 +78,8 @@ server {
         fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
         fastcgi_index index.php;
         include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        fastcgi_param DOCUMENT_ROOT $realpath_root;
     }
 
     location ~ /\.ht {
@@ -248,6 +250,9 @@ If you only use Laravel mix for asset compilation and don't use any node scripts
 Before using on live server, it is best to test on a local VM (like [Laravel Homestead](https://laravel.com/docs/8.x/homestead)) first.
 
 ## Changes
+V4.1
+- Added fastcgi_param SCRIPT_FILENAME and DOCUMENT_ROOT variables (for better nginx symlink handling).
+
 V4.0
 - Added optional deployment_npm task (disabled by default).
 - Tidied up deployments into releases folder.
