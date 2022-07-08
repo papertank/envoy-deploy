@@ -17,6 +17,7 @@
 	$path = $_ENV['DEPLOY_PATH'] ?? null;
 	$slack = $_ENV['DEPLOY_SLACK_WEBHOOK'] ?? null;
 	$healthUrl = $_ENV['DEPLOY_HEALTH_CHECK'] ?? null;
+	$restartQueue = $_ENV['DEPLOY_RESTART_QUEUE'] ?? false;
 
 	if ( substr($path, 0, 1) !== '/' ) throw new Exception('Careful - your deployment path does not begin with /');
 
@@ -54,6 +55,8 @@
 	deployment_composer
 	deployment_migrate
 	deployment_cache
+	deployment_symlink
+	deployment_reload
 	deployment_finish
 	health_check
 	deployment_option_cleanup
@@ -61,6 +64,7 @@
 
 @story('rollback')
 	deployment_rollback
+	deployment_reload
 	health_check
 @endstory
 
@@ -109,15 +113,27 @@
 	echo "Cache cleared"
 @endtask
 
-@task('deployment_finish')
+@task('deployment_symlink')
+	ln -nfs {{ $release }} {{ $path }}/current
+	echo "Deployment symlinked to current"
+@endtask
+
+@task('deployment_reload')
 	{{ $php }} {{ $release }}/artisan storage:link
 	echo "Storage symbolic links created"
+	@if ( $restartQueue === 'horizon' )
+	{{ $php }} {{ $release }}/artisan horizon:terminate --quiet
+	echo "Horizon supervisor restarted"
+	@elseif ( $restartQueue != false )
 	{{ $php }} {{ $release }}/artisan queue:restart --quiet
-	echo "Queue restarted"
-	ln -nfs {{ $release }} {{ $path }}/current
+	echo "Queue daemon restarted"
+	@endif
 	@if ( $php_fpm )
 	sudo -S service {{ $php_fpm }} reload
 	@endif
+@endtask
+
+@task('deployment_finish')
 	@if ( isset($down) && $down )
 	cd {{ $path }}/current
 	php artisan up
@@ -156,9 +172,6 @@
 @task('deployment_rollback')
 	cd {{ $releases }}
 	ln -nfs {{ $releases }}/$(find . -maxdepth 1 -name "20*" | sort  | tail -n 2 | head -n1) {{ $path }}/current
-	@if ( $php_fpm )
-	sudo -S service {{ $php_fpm }} reload
-	@endif
 	echo "Rolled back to $(find . -maxdepth 1 -name "20*" | sort  | tail -n 2 | head -n1)"
 @endtask
 
