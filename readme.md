@@ -168,7 +168,7 @@ Run new deployment
         --env=ENVIRONMENT        The environment to use. (Default: "production")
         --branch=BRANCH          The git branch to use. (Default: "master")
         --cleanup                Whether to cleanup old deployments
-		--down					 Enable maintenance mode
+        --down					 Enable maintenance mode
 
 #### `envoy run deployment_cleanup`
 
@@ -250,6 +250,8 @@ If you use Laravel mix / npm dependencies in your project, you should add the (d
 	deployment_npm
 	deployment_migrate
 	deployment_cache
+	deployment_symlink
+	deployment_reload
 	deployment_finish
 	health_check
 	deployment_option_cleanup

@@ -129,6 +129,7 @@
 	@endif
 	@if ( $php_fpm )
 	sudo -S service {{ $php_fpm }} reload
+	echo "PHP-FPM restarted"
 	@endif
 @endtask
 
