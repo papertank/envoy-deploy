@@ -115,17 +115,16 @@
 
 @task('deployment_symlink')
 	ln -nfs {{ $release }} {{ $path }}/current
-	echo "Deployment symlinked to current"
+	echo "Deployment [{{ $release }}] symlinked to [{{ $path }}/current]"
 @endtask
 
 @task('deployment_reload')
-	{{ $php }} {{ $release }}/artisan storage:link
-	echo "Storage symbolic links created"
+	{{ $php }} {{ $path }}/current/artisan storage:link
 	@if ( $restartQueue === 'horizon' )
-	{{ $php }} {{ $release }}/artisan horizon:terminate --quiet
+	{{ $php }} {{ $path }}/current/artisan horizon:terminate --quiet
 	echo "Horizon supervisor restarted"
 	@elseif ( $restartQueue != false )
-	{{ $php }} {{ $release }}/artisan queue:restart --quiet
+	{{ $php }} {{ $path }}/current/artisan queue:restart --quiet
 	echo "Queue daemon restarted"
 	@endif
 	@if ( $php_fpm )
