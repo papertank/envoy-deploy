@@ -65,6 +65,10 @@
 @endstory
 
 @task('deployment_start')
+	@if ( isset($down) && $down )
+	cd {{ $path }}/current
+	php artisan down
+	@endif
 	cd {{ $path }}
 	echo "Deployment ({{ $date }}) started"
 	git clone {{ $repo }} --branch={{ $branch }} --depth=1 -q {{ $release }}
@@ -113,6 +117,10 @@
 	ln -nfs {{ $release }} {{ $path }}/current
 	@if ( $php_fpm )
 	sudo -S service {{ $php_fpm }} reload
+	@endif
+	@if ( isset($down) && $down )
+	cd {{ $path }}/current
+	php artisan up
 	@endif
 	echo "Deployment ({{ $date }}) finished"
 @endtask
