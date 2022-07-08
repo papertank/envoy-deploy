@@ -11,6 +11,7 @@
 
 	$php = $_ENV['DEPLOY_PHP_CMD'] ?? 'php';
 	$composer = $_ENV['DEPLOY_COMPOSER_CMD'] ?? 'composer';
+	$php_fpm = $_ENV['DEPLOY_PHP_FPM'] ?? null;
 	$server = $_ENV['DEPLOY_SERVER'] ?? null;
 	$repo = $_ENV['DEPLOY_REPOSITORY'] ?? null;
 	$path = $_ENV['DEPLOY_PATH'] ?? null;
@@ -110,6 +111,9 @@
 	{{ $php }} {{ $release }}/artisan queue:restart --quiet
 	echo "Queue restarted"
 	ln -nfs {{ $release }} {{ $path }}/current
+	@if ( $php_fpm )
+	sudo -S service {{ $php_fpm }} reload
+	@endif
 	echo "Deployment ({{ $date }}) finished"
 @endtask
 
@@ -144,6 +148,9 @@
 @task('deployment_rollback')
 	cd {{ $releases }}
 	ln -nfs {{ $releases }}/$(find . -maxdepth 1 -name "20*" | sort  | tail -n 2 | head -n1) {{ $path }}/current
+	@if ( $php_fpm )
+	sudo -S service {{ $php_fpm }} reload
+	@endif
 	echo "Rolled back to $(find . -maxdepth 1 -name "20*" | sort  | tail -n 2 | head -n1)"
 @endtask
 
