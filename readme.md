@@ -18,12 +18,20 @@ To download and run out-with your Laravel project, clone this directory and do a
 
 ### Laravel
 
+#### Laravel 9+
+
+To use within an existing Laravel 8+ project, you simply need to download the version 5 `Envoy.blade.php` file to your project root:
+
+```
+wget https://raw.githubusercontent.com/papertank/envoy-deploy/master/Envoy.blade.php
+```
+
 #### Laravel 7+
 
 To use within an existing Laravel 7+ project, you simply need to download the version 4 `Envoy.blade.php` file to your project root:
 
 ```
-wget https://raw.githubusercontent.com/papertank/envoy-deploy/master/Envoy.blade.php
+wget https://raw.githubusercontent.com/papertank/envoy-deploy/v4/Envoy.blade.php
 ```
 
 #### Laravel 5-6
@@ -122,6 +130,12 @@ You can also run the cleanup script independently (without deploying) using
 
 	envoy run deployment_cleanup
 
+### Deploy with Maintenance Mode
+
+Although this script is designed to use zero-downtime deployments, you can activate Laravel's maintenance mode while deploying by using the down option:
+
+	envoy run deploy --down
+
 ### Health Check
 
 If you would like to perform a health check (for 200 response) after deploying, simply add your site's URL in the .env file:
@@ -154,6 +168,7 @@ Run new deployment
         --env=ENVIRONMENT        The environment to use. (Default: "production")
         --branch=BRANCH          The git branch to use. (Default: "master")
         --cleanup                Whether to cleanup old deployments
+		--down					 Enable maintenance mode
 
 #### `envoy run deployment_cleanup`
 
@@ -188,31 +203,40 @@ The deployment folder .env file and storage directory are symlinked to the paren
 
 ## Optional Features
 
-### Laravel Horizon
+### Restart Queue Workers
 
-If you use [Laravel Horizon](https://laravel.com/docs/8.x/horizon) for your Redis queue management, you should update the deployment script to restart queues using Horizon.
-
-Replace:
+If you use Laravel's queue daemon, you should set the following environment variable to `true` to automatically run `php artisan artisan queue:restart`
 
 ```
-php {{ $release }}/artisan queue:restart --quiet
+DEPLOY_RESTART_QUEUE=true
 ```
 
-With:
+Alternatively, if you use [Laravel Horizon](https://laravel.com/docs/9.x/horizon) for your Redis queue management, you should set the value to `horizon` to automatically `php artisan horizon:terminate`
 
 ```
-php {{ $release }}/artisan horizon:terminate
+DEPLOY_RESTART_QUEUE="horizon"
 ```
 
 ### Reload PHP FPM
 
 If you use something like OPCache, you should reload the PHP FPM service at the end of each deployment.
 
-Simply add the following to the end of the `deployment_finish` task. Note: you will need to change based on your PHP version and/or server setup.
+Simply update the following environment variable to your PHP-FPM service name, which will automatically run `sudo -S service  php8.1-fpm reload`
 
 ```
-sudo -S service php7.4-fpm reload
+DEPLOY_PHP_FPM="php8.1-fpm"
 ```
+
+### Multiple PHP Versions
+
+If you use multiple PHP versions on your server (e.g. with Laravel Forge) and are not with the default version, you should update your environment variables to specify the version and binaries. For example:
+
+```
+DEPLOY_PHP_CMD="/usr/bin/php7.4"
+DEPLOY_COMPOSER_CMD="/usr/bin/php7.4 /usr/local/bin/composer"
+DEPLOY_PHP_FPM="php7.4-fpm"
+```
+
 
 ### Laravel Mix / NPM
 
@@ -250,6 +274,14 @@ If you only use Laravel mix for asset compilation and don't use any node scripts
 Before using on live server, it is best to test on a local VM (like [Laravel Homestead](https://laravel.com/docs/8.x/homestead)) first.
 
 ## Changes
+V5.0 (TBC)
+- Added $php and $composer variables to allow binary paths to be updated.
+- Added $releases variable for /releases path.
+- Added optional $php_fpm variable (DEPLOY_PHP_FPM env variable) to reload FPM service.
+- Added --down option to enable maintenance mode.
+- Added deployment_reload task. 
+- Added $restartQueue variable (DEPLOY_RESTART_QUEUE env variable) to restart queue / horizon.
+
 V4.1
 - Added fastcgi_param SCRIPT_FILENAME and DOCUMENT_ROOT variables (for better nginx symlink handling).
 
