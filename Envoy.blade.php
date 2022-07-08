@@ -9,6 +9,8 @@
 		exit;
 	}
 
+	$php = $_ENV['DEPLOY_PHP_CMD'] ?? 'php';
+	$composer = $_ENV['DEPLOY_COMPOSER_CMD'] ?? 'composer';
 	$server = $_ENV['DEPLOY_SERVER'] ?? null;
 	$repo = $_ENV['DEPLOY_REPOSITORY'] ?? null;
 	$path = $_ENV['DEPLOY_PATH'] ?? null;
@@ -79,11 +81,11 @@
 @task('deployment_composer')
 	echo "Installing composer dependencies..."
 	cd {{ $release }}
-	composer install --no-interaction --quiet --no-dev --prefer-dist --optimize-autoloader
+	{{ $composer }} install --no-interaction --quiet --no-dev --prefer-dist --optimize-autoloader
 @endtask
 
 @task('deployment_migrate')
-	php {{ $release }}/artisan migrate --env={{ $env }} --force --no-interaction
+	{{ $php }} {{ $release }}/artisan migrate --env={{ $env }} --force --no-interaction
 @endtask
 
 @task('deployment_npm')
@@ -95,16 +97,16 @@
 @endtask
 
 @task('deployment_cache')
-	php {{ $release }}/artisan view:clear --quiet
-	php {{ $release }}/artisan cache:clear --quiet
-	php {{ $release }}/artisan config:cache --quiet
+	{{ $php }} {{ $release }}/artisan view:clear --quiet
+	{{ $php }} {{ $release }}/artisan cache:clear --quiet
+	{{ $php }} {{ $release }}/artisan config:cache --quiet
 	echo "Cache cleared"
 @endtask
 
 @task('deployment_finish')
-	php {{ $release }}/artisan storage:link
+	{{ $php }} {{ $release }}/artisan storage:link
 	echo "Storage symbolic links created"
-	php {{ $release }}/artisan queue:restart --quiet
+	{{ $php }} {{ $release }}/artisan queue:restart --quiet
 	echo "Queue restarted"
 	ln -nfs {{ $release }} {{ $path }}/current
 	echo "Deployment ({{ $date }}) finished"
