@@ -276,7 +276,7 @@ If you only use Laravel mix for asset compilation and don't use any node scripts
 Before using on live server, it is best to test on a local VM (like [Laravel Homestead](https://laravel.com/docs/8.x/homestead)) first.
 
 ## Changes
-V5.0 (TBC)
+V5.0
 - Added $php and $composer variables to allow binary paths to be updated.
 - Added $releases variable for /releases path.
 - Added optional $php_fpm variable (DEPLOY_PHP_FPM env variable) to reload FPM service.
