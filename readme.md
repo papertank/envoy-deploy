@@ -1,6 +1,6 @@
 # Laravel Envoy Deploy
 
-This repository includes an Envoy.blade.php script that is designed to provide a basic "zero-downtime" deployment option using the open-source [Laravel Envoy](http://laravel.com/docs/8.x/envoy) tool.
+This repository includes an Envoy.blade.php script that is designed to provide a basic "zero-downtime" deployment option using the open-source [Laravel Envoy](https://laravel.com/docs/envoy) tool.
 
 ## Requirements
 
